@@ -5,12 +5,22 @@ on:
       targetTag:
         description: 'Tag to re-fresh (e.g. 4.9.0)'
         required: true
+permissions:
+  contents: read
+
 jobs:
   release:
+    permissions:
+      contents: write  # for Git to git push
     runs-on: ubuntu-latest
     steps:
+    - name: Harden the runner (Audit all outbound calls)
+      uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+      with:
+        egress-policy: audit
+
     - name: Checkout Branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
       with:
         ref: dev
         fetch-depth: 0
